@@ -4,7 +4,7 @@ const app=express();
 app.use(express.json()); // para leer req.body midleware
 
 
-var allowlist = ['https://api-node-pied.vercel.app/','https://myapp.com']
+var allowlist = ['http://localhost:3000','https://myapp.com']
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
   if (allowlist.indexOf(req.header('Origin')) !== -1) {
@@ -18,10 +18,10 @@ var corsOptionsDelegate = function (req, callback) {
 
 app.use(cors(corsOptionsDelegate));
 
-app.use(express.static(__dirname + '/public'));
+app.use('/api',express.static(__dirname + '/public'));
 const {logErrors,errorHandler,boomErrorHandler}=require('./midlewares/error.handler');//importamos midleware
 const routerApi=require('./routes/index');
-const port=3000;
+const port=process.env.PORT || 3000;
 
 
 
@@ -31,8 +31,14 @@ routerApi(app);
 app.use(logErrors);
 app.use(boomErrorHandler);
 app.use(errorHandler);
-app.get('/',(req,res)=>{
+app.get('/api',(req,res)=>{
     res.render('./public');
+});
+
+
+app.get('/api/hola',(req,res)=>{
+    res.set('Content-Type', 'text/html');
+    res.send(Buffer.from('<h2>Test String</h2>'));
 });
 
 
