@@ -4,7 +4,7 @@ const app=express();
 app.use(express.json()); // para leer req.body midleware
 
 
-var allowlist = ['http://localhost:3000','https://myapp.com']
+var allowlist = ['https://api-node-pied.vercel.app/','https://myapp.com']
 var corsOptionsDelegate = function (req, callback) {
   var corsOptions;
   if (allowlist.indexOf(req.header('Origin')) !== -1) {
